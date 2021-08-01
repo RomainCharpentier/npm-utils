@@ -1,3 +1,3 @@
-export const sendMail = (mail: string) => `Send mail to ${mail}`;
+export const sendMail = (mail: string): string => `Send mail to ${mail}`;
 
-export const sendSms = (number: string) => `Send sms to ${number}`;
+export const sendSms = (number: string): string => `Send sms to ${number}`;
