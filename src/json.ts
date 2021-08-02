@@ -57,3 +57,16 @@ export const cleanJson = (json: any): any => {
     return json;
   }
 }
+
+export const adaptJson = (json: any): any => {
+  if (!json) {
+    return null;
+  } if (json instanceof Array) {
+    // TODO
+    return json.map(value => adaptJson(value)).reduce((v1, v2) => [...v1, v2], []);
+  } else if (json instanceof Object) {
+    return Object.keys(json).map(key => ({ [key]: adaptJson(json[key]) })).reduce((v1, v2) => ({ ...v1, ...v2 }), {});
+  } else {
+    return null;
+  }
+}

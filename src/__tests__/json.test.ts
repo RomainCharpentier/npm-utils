@@ -1,4 +1,4 @@
-import { readJson, cleanJson, whatIsIt } from '../json';
+import { readJson, cleanJson, whatIsIt, adaptJson } from '../json';
 
 /**
  *  ----------------- ReadJson
@@ -59,6 +59,99 @@ test('cleanJson_03', () => {
     }
   }
   expect(cleanJson(json)).toStrictEqual(expected);
+});
+
+/**
+ *  ----------------- AdaptJson
+ */
+
+test('adaptJson_null', () => {
+  expect(adaptJson(null)).toBe(null);
+});
+
+test('adaptJson_01', () => {
+  const json = {
+    'test1': {
+      'test11': undefined,
+      'test12': 'default'
+    }
+  }
+  const expected = {
+    'test1': {
+      'test11': null,
+      'test12': null
+    }
+  }
+  expect(adaptJson(json)).toStrictEqual(expected);
+});
+
+test('adaptJson_02', () => {
+  const json = {
+    'test1': {
+      'test11': undefined,
+      'test12': 'default'
+    },
+    'test2': undefined,
+    'test3': {
+      'test31': {
+        'test311': undefined,
+      },
+      'test32': {
+        'test321': 'default'
+      }
+    }
+  }
+  const expected = {
+    'test1': {
+      'test11': null,
+      'test12': null
+    },
+    'test2': null,
+    'test3': {
+      'test31': {
+        'test311': null,
+      },
+      'test32': {
+        'test321': null
+      }
+    }
+  }
+  expect(adaptJson(json)).toStrictEqual(expected);
+});
+
+test('adaptJson_03', () => {
+  const json = [
+    {
+      person: {
+        lastName: 'default',
+        firstName: 'default'
+      },
+      age: 'default'
+    },
+    {
+      test: undefined
+    }
+  ]
+  const expected = [
+    {
+      age: null,
+      person: {
+        firstName: null,
+        lastName: null
+      },
+      test: null
+    },
+    {
+      age: null,
+      person: {
+        firstName: null,
+        lastName: null
+      },
+      test: null
+    }
+  ]
+  console.log(adaptJson(json))
+  expect(adaptJson(json)).toStrictEqual(expected);
 });
 
 /**
