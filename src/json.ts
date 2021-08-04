@@ -62,8 +62,11 @@ export const adaptJson = (json: any): any => {
   if (!json) {
     return null;
   } if (json instanceof Array) {
-    // TODO
-    return json.map(value => adaptJson(value)).reduce((v1, v2) => [...v1, v2], []);
+    const res = json.map(value => adaptJson(value)).reduce((j1, j2) => {
+      Object.keys(j2).forEach(key => { j1[key] = j2[key] });
+      return j1;
+    }, {});
+    return Array(json.length).fill(res);
   } else if (json instanceof Object) {
     return Object.keys(json).map(key => ({ [key]: adaptJson(json[key]) })).reduce((v1, v2) => ({ ...v1, ...v2 }), {});
   } else {
