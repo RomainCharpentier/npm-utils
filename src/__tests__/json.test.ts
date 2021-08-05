@@ -76,50 +76,11 @@ test('adaptJson_01', () => {
       'test12': 'default'
     }
   }
-  const expected = {
-    'test1': {
-      'test11': null,
-      'test12': null
-    }
-  }
+  const expected = json;
   expect(adaptJson(json)).toStrictEqual(expected);
 });
 
 test('adaptJson_02', () => {
-  const json = {
-    'test1': {
-      'test11': undefined,
-      'test12': 'default'
-    },
-    'test2': undefined,
-    'test3': {
-      'test31': {
-        'test311': undefined,
-      },
-      'test32': {
-        'test321': 'default'
-      }
-    }
-  }
-  const expected = {
-    'test1': {
-      'test11': null,
-      'test12': null
-    },
-    'test2': null,
-    'test3': {
-      'test31': {
-        'test311': null,
-      },
-      'test32': {
-        'test321': null
-      }
-    }
-  }
-  expect(adaptJson(json)).toStrictEqual(expected);
-});
-
-test('adaptJson_03', () => {
   const json = [
     {
       person: {
@@ -129,23 +90,23 @@ test('adaptJson_03', () => {
       age: 'default'
     },
     {
-      test: undefined
+      test: null
     }
   ]
   const expected = [
     {
-      age: null,
+      age: 'default',
       person: {
-        firstName: null,
-        lastName: null
+        firstName: 'default',
+        lastName: 'default'
       },
-      test: null
+      test: undefined
     },
     {
-      age: null,
+      age: undefined,
       person: {
-        firstName: null,
-        lastName: null
+        firstName: undefined,
+        lastName: undefined
       },
       test: null
     }
