@@ -1,4 +1,4 @@
-import { readJson, cleanJson, whatIsIt, adaptJson } from '../json';
+import { readJson, cleanJson, whatIsIt, adaptJsonArray } from '../json';
 
 /**
  *  ----------------- ReadJson
@@ -65,11 +65,11 @@ test('cleanJson_03', () => {
  *  ----------------- AdaptJson
  */
 
-test('adaptJson_null', () => {
-  expect(adaptJson(null)).toBe(null);
+test('adaptJsonArray_null', () => {
+  expect(adaptJsonArray(null)).toBe(null);
 });
 
-test('adaptJson_01', () => {
+test('adaptJsonArray_01', () => {
   const json = {
     'test1': {
       'test11': undefined,
@@ -77,10 +77,10 @@ test('adaptJson_01', () => {
     }
   }
   const expected = json;
-  expect(adaptJson(json)).toStrictEqual(expected);
+  expect(adaptJsonArray(json)).toStrictEqual(expected);
 });
 
-test('adaptJson_02', () => {
+test('adaptJsonArray_02', () => {
   const json = [
     {
       person: {
@@ -111,8 +111,36 @@ test('adaptJson_02', () => {
       test: null
     }
   ]
-  console.log(adaptJson(json))
-  expect(adaptJson(json)).toStrictEqual(expected);
+  expect(adaptJsonArray(json)).toStrictEqual(expected);
+});
+
+test('adaptJsonArray_02', () => {
+  const json = {
+    key: [
+      {
+        name: 'default',
+        value: 'default'
+      },
+      {
+        test: 'default'
+      }
+    ]
+  }
+  const expected = {
+    key: [
+      {
+        name: 'default',
+        value: 'default',
+        test: undefined
+      },
+      {
+        test: 'default',
+        name: undefined,
+        value: undefined
+      }
+    ]
+  }
+  expect(adaptJsonArray(json)).toStrictEqual(expected);
 });
 
 /**

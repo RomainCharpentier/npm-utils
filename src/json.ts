@@ -38,6 +38,7 @@ export const cleanJson = (json: any): any => {
   } if (json instanceof Array) {
     return json.filter((value: any) => value).map((value: any) => cleanJson(value));
   } else if (json instanceof Object) {
+    // Removes unused attributes
     let keys = Object.keys(json);
     keys.forEach((key: string) => {
       const cleaned: any = cleanJson(json[key]);
@@ -58,21 +59,33 @@ export const cleanJson = (json: any): any => {
   }
 }
 
-export const adaptJson = (json: any): any => {
+/**
+ * Adapts each array values with the same structure
+ * @param json 
+ * @returns 
+ */
+export const adaptJsonArray = (json: any): any => {
   if (!json) {
     return json;
   } if (json instanceof Array) {
-    return json.map(adaptJson).map(j => json.reduce((j1, j2) => {
+    // Each value of array has the same structure (undefined is the default value)
+    return json.map(adaptJsonArray).map(j => json.reduce((j1, j2) => {
       Object.keys(j2).forEach(key => { j1[key] = j1[key] !== undefined ? j1[key] : undef(j2[key]) });
       return j1;
-    }, j))
+    }, j));
   } else if (json instanceof Object) {
-    return Object.keys(json).map(key => ({ [key]: adaptJson(json[key]) })).reduce((v1, v2) => ({ ...v1, ...v2 }), {});
+    // Searches if an attribute is an array to adapt it
+    return Object.keys(json).map(key => ({ [key]: adaptJsonArray(json[key]) })).reduce((v1, v2) => ({ ...v1, ...v2 }), {});
   } else {
     return json;
   }
 }
 
+/**
+ * Replaces all values with undefined
+ * @param json json object
+ * @returns json with undefined values
+ */
 const undef = (json: any): any => {
   if (!json) {
     return undefined;
