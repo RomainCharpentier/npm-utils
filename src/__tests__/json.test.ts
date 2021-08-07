@@ -167,7 +167,7 @@ test('adaptJsonArray_02', () => {
         firstName: 'default',
         lastName: 'default'
       },
-      test: undefined
+      test: 'test'
     },
     {
       age: undefined,

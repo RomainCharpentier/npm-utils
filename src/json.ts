@@ -109,12 +109,15 @@ export const compareJson = (j1: any, j2: any): boolean => {
 }
 
 const compareJson2 = (j1: any, j2: any): boolean => {
-  if (j1 instanceof Array) {
+  if (whatIsIt(j1) !== whatIsIt(j2)) {
+    return false;
+  } else if (j1 instanceof Array) {
     // Ignores the array order
-    return j1.map(value => compareJson(value, j2.find((v2: any[]) => compareJson(v2, value)))).reduce((v1, v2) => v1 && v2, true);
+    return j1.map(value => compareJson(value, j2.find((v2: any) => compareJson(v2, value)))).reduce((v1, v2) => v1 && v2, true);
   } else if (j1 instanceof Object) {
-    return Object.keys(j1).map(key => j2 && Object.keys(j2).includes(key) && compareJson(j1[key], j2[key])).reduce((v1, v2) => v1 && v2, true);
+    return Object.keys(j1).map(key => j2 && Object.keys(j2).includes(key) && compareJson(j1[key], j2[key])).map(t => {console.log(t); return t;}).reduce((v1, v2) => v1 && v2, true);
   } else {
+    console.log(j1 + " === " + j2 + " = " + (j1===j2));
     return j1 === j2;
   }
 }
