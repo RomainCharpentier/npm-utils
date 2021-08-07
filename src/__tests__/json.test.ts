@@ -1,4 +1,4 @@
-import { readJson, cleanJson, whatIsIt, adaptJsonArray } from '../json';
+import { readJson, cleanJson, whatIsIt, adaptJsonArray, compareJson } from '../json';
 
 /**
  *  ----------------- ReadJson
@@ -141,6 +141,128 @@ test('adaptJsonArray_02', () => {
     ]
   }
   expect(adaptJsonArray(json)).toStrictEqual(expected);
+});
+
+/**
+ *  ----------------- CompareJson
+ */
+
+ test('compareJson_false', () => {
+  const j1 = [
+    {
+      person: {
+        lastName: 'default',
+        firstName: 'default'
+      },
+      age: 'default'
+    },
+    {
+      test: null
+    }
+  ]
+  const j2 = [
+    {
+      age: 'default',
+      person: {
+        firstName: 'default',
+        lastName: 'default'
+      },
+      test: undefined
+    },
+    {
+      age: undefined,
+      person: {
+        firstName: undefined,
+        lastName: undefined
+      },
+      test: null
+    }
+  ]
+  expect(compareJson(j1,j2)).toBe(false);
+});
+
+test('compareJson_true', () => {
+ const j1 = [
+   {
+     person: {
+       lastName: 'default',
+       firstName: 'default'
+     },
+     age: 'default'
+   },
+   {
+     test: null
+   }
+ ]
+ const j2 = [
+  {
+    person: {
+      lastName: 'default',
+      firstName: 'default'
+    },
+    age: 'default'
+  },
+  {
+    test: null
+  }
+]
+ expect(compareJson(j1,j2)).toBe(true);
+});
+
+test('compareJson_true_order_attributes', () => {
+ const j1 = [
+   {
+     person: {
+       lastName: 'default',
+       firstName: 'default'
+     },
+     age: 'default'
+   },
+   {
+     test: null
+   }
+ ]
+ const j2 = [
+  {
+    person: {
+      firstName: 'default',
+      lastName: 'default'
+    },
+    age: 'default'
+  },
+  {
+    test: null
+  }
+]
+ expect(compareJson(j1,j2)).toBe(true);
+});
+
+test('compareJson_true_order_array', () => {
+ const j1 = [
+   {
+     person: {
+       lastName: 'default',
+       firstName: 'default'
+     },
+     age: 'default'
+   },
+   {
+     test: null
+   }
+ ]
+ const j2 = [
+  {
+    test: null
+  },
+  {
+    person: {
+      lastName: 'default',
+      firstName: 'default'
+    },
+    age: 'default'
+  }
+]
+ expect(compareJson(j1,j2)).toBe(true);
 });
 
 /**

@@ -97,3 +97,24 @@ const undef = (json: any): any => {
     return undefined;
   }
 }
+
+/**
+ * Compares 2 json objets
+ * @param j1 
+ * @param j2 
+ * @returns 
+ */
+export const compareJson = (j1: any, j2: any): boolean => {
+  return compareJson2(j1, j2) && compareJson2(j2, j1);
+}
+
+const compareJson2 = (j1: any, j2: any): boolean => {
+  if (j1 instanceof Array) {
+    // Ignores the array order
+    return j1.map(value => compareJson(value, j2.find((v2: any[]) => compareJson(v2, value)))).reduce((v1, v2) => v1 && v2, true);
+  } else if (j1 instanceof Object) {
+    return Object.keys(j1).map(key => j2 && Object.keys(j2).includes(key) && compareJson(j1[key], j2[key])).reduce((v1, v2) => v1 && v2, true);
+  } else {
+    return j1 === j2;
+  }
+}
